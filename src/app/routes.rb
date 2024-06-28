@@ -19,20 +19,20 @@ $router.register('GET', '/employees/:id') do |request|
 
         raise HTTP::BadRequest if !id
         
-        service = EmployeeService.new
+        service = Driving::EmployeeService.new
 
         service.read(id)
-    rescue RecordNotFound
+    rescue Driven::RecordNotFound
         raise HTTP::NotFound
     end
 end
 
 $router.register('GET', '/employees') do |request|
     begin        
-        service = EmployeeService.new
+        service = Driving::EmployeeService.new
 
         service.read_collection
-    rescue RecordNotFound
+    rescue Driven::RecordNotFound
         raise HTTP::NotFound
     end
 end
@@ -46,11 +46,10 @@ $router.register('POST', '/employees') do |request|
     begin
         params = T.let(NewUserParams.from_hash(request.body), NewUserParams)        
 
-        employee_service = EmployeeService.new
+        employee_service = Driving::EmployeeService.new
         
         employee_service.create(params.name, Date.iso8601(params.birth))
-    rescue => e
-        puts e
+    rescue
         raise HTTP::ErrorUnknown
     end
 end
@@ -67,13 +66,12 @@ $router.register('PUT', '/employees/:id') do |request|
 
         params = T.let(UpdateUserParams.from_hash(request.body), UpdateUserParams)       
         
-        employee_service = EmployeeService.new
+        employee_service = Driving::EmployeeService.new
 
         employee_service.update_name(id, params.name)
     rescue TypeError
         raise HTTP::BadRequest
-    rescue => e
-        puts e
+    rescue
         raise HTTP::ErrorUnknown
     end
 end
@@ -84,15 +82,14 @@ $router.register('DELETE', '/employees/:id') do |request|
 
         raise HTTP::BadRequest if !id
 
-        employee_service = EmployeeService.new
+        employee_service = Driving::EmployeeService.new
 
         employee_service.delete(id)
         
         nil
     rescue TypeError
         raise HTTP::BadRequest
-    rescue => e
-        puts e
+    rescue
         raise HTTP::ErrorUnknown
     end
 end
