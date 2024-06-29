@@ -1,8 +1,11 @@
 # typed: strict
+# frozen_string_literal: true
 
 require 'sorbet-runtime'
 
+# Core module, contains domain models and ports
 module Core
+  # Employee domain model
   class Employee
     extend T::Sig
 
@@ -29,6 +32,8 @@ module Core
     end
   end
 
+  # Employee driving port
+  # Implemented by services acting upon employees
   module EmployeeDrivingPort
     extend T::Sig
     extend T::Helpers
@@ -50,6 +55,8 @@ module Core
     def delete(id); end
   end
 
+  # Employee driven port
+  # Implemented by employee repositories
   module EmployeeDrivenPort
     extend T::Sig
     extend T::Helpers

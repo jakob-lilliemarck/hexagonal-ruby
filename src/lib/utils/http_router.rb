@@ -1,7 +1,9 @@
 # typed: strict
+# frozen_string_literal: true
 
 require 'sorbet-runtime'
 
+# A very simple HTTP router
 module HTTP
   extend T::Sig
 
@@ -9,43 +11,56 @@ module HTTP
 
   Handler = T.type_alias { T.proc.params(request: HTTP::Request).returns(T.nilable(String)) }
 
-  class ErrorUnknown < StandardError
-    extend T::Sig
+  module Errors
+    # Convenience error type used while developing and should never really be used otherwise.
+    # There are no unknown errors!
+    class ErrorUnknown < StandardError
+      extend T::Sig
 
-    sig { void }
-    def initialize
-      super('Unknown error')
+      sig { void }
+      def initialize
+        super('Unknown error')
+      end
+    end
+
+    # HTTP 404 Not found
+    class NotFound < StandardError
+      extend T::Sig
+
+      sig { void }
+      def initialize
+        super('Not found')
+      end
+    end
+
+    # HTTP 400 Bad request
+    class BadRequest < StandardError
+      extend T::Sig
+
+      sig { void }
+      def initialize
+        super('Bad request')
+      end
     end
   end
 
-  class BadRequest < StandardError
-    extend T::Sig
-
-    sig { void }
-    def initialize
-      super('Bad request')
-    end
-  end
-
-  class NotFound < StandardError
-    extend T::Sig
-
-    sig { void }
-    def initialize
-      super('Not found')
-    end
-  end
-
+  # Request struct
+  # Carries HTTP payload and route params to the handlers
   class Request < T::Struct
     const :params, T::Hash[Symbol, String]
     const :body, T.nilable(T::Hash[String, T.untyped])
   end
 
+  # A route record
+  # Made up form a path and a handler
   class RouteRecord < T::Struct
     const :path, String
     const :handler, Handler
   end
 
+  # The router
+  # Registers route handlers to routes and matches incoming requests to them
+  # Also extracts route params and json body payloads
   class Router < T::Struct
     extend T::Sig
 
@@ -64,9 +79,9 @@ module HTTP
       request = Request.new(params: params, body: body)
       resource = record.handler.call(request)
       [200, { 'Content-Type' => 'application/json' }, [resource || '']]
-    rescue NotFound
+    rescue Errors::NotFound
       [404, { 'Content-Type' => 'text/plain' }, ['Not Found']]
-    rescue BadRequest
+    rescue Errors::BadRequest
       [400, { 'Content-Type' => 'text/plain' }, ['Bad request']]
     end
 
@@ -83,7 +98,7 @@ module HTTP
         # Splits the pattern into method and path parts
         pattern_method, pattern_path = pattern.split(' ', 2)
 
-        raise NotFound.new if !pattern_method || !pattern_path
+        raise Errors::NotFound if !pattern_method || !pattern_path
 
         # Skip if the HTTP method does not match
         next if pattern_method != method
@@ -102,7 +117,7 @@ module HTTP
       end
 
       # If no pattern matches the path, return nil
-      raise NotFound.new
+      raise Errors::NotFound
     end
 
     # Matches a given path against registered route patterns and returns the matched pattern.

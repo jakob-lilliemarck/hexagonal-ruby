@@ -1,20 +1,29 @@
 # typed: strict
+# frozen_string_literal: true
 
 require 'date'
 require_relative '../core/employee_model'
 
+# In memory mocked database table
+# rubocop:disable Style/GlobalVars
 $employees = {}
+# rubocop:enable Style/GlobalVars
 
 module Driven
-  class RecordNotFound < StandardError
-    extend T::Sig
+  module Errors
+    # Error raised when a searched record could not be found
+    class RecordNotFound < StandardError
+      extend T::Sig
 
-    sig { params(id: String).void }
-    def initialize(id)
-      super("Record not found: #{id}")
+      sig { params(id: String).void }
+      def initialize(id)
+        super("Record not found: #{id}")
+      end
     end
   end
 
+  # Employee repository implementing the EmployeeDrivenPort
+  # Responsible for loading and saving employees
   class EmployeeRepository
     extend T::Sig
     extend T::Helpers
@@ -22,13 +31,15 @@ module Driven
 
     sig { void }
     def initialize
+      # rubocop:disable Style/GlobalVars
       @employees = T.let($employees, T::Hash[String, Core::Employee])
+      # rubocop:enable Style/GlobalVars
     end
 
     sig { override.params(id: String).returns(Core::Employee) }
     def read(id)
       employee = @employees[id]
-      raise RecordNotFound.new(id) unless employee
+      raise Errors::RecordNotFound, id unless employee
 
       employee
     end

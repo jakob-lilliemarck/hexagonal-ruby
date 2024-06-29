@@ -1,9 +1,12 @@
 # typed: strict
+# frozen_string_literal: true
 
 require 'json'
 require 'sorbet-runtime'
 require_relative 'resources/employee'
 require_relative '../lib/driven/employee_repository'
+
+# API application
 class App
   extend T::Sig
 

@@ -1,9 +1,12 @@
 # typed: strict
+# frozen_string_literal: true
 
 require 'ulid'
 require_relative '../core/employee_model'
 
 module Driving
+  # Employee service implementing EmployeeDrivingPort
+  # Responsible for orchestrating calls to the domain model and driven adapters
   class EmployeeService
     include Core::EmployeeDrivingPort
     extend T::Sig
