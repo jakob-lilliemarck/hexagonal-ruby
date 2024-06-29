@@ -1,6 +1,6 @@
 # typed: strict
 require 'date'
-require_relative '../core/employee'
+require_relative '../core/employee_model'
 
 $employees = {}
 

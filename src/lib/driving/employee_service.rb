@@ -1,7 +1,7 @@
 # typed: strict
 require 'ulid'
 require 'json'
-require_relative '../core/employee'
+require_relative '../core/employee_model'
 require_relative '../driven/employee_repository'
 
 module Driving 

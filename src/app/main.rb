@@ -1,15 +1,15 @@
 # typed: strict
 require 'json'
 require 'sorbet-runtime'
-require_relative '../lib/utils/http_router'
-require_relative '../lib/driving/employee_service'
-
+require_relative 'resources/employee'
 class App
   extend T::Sig
   
-  sig { params(router: HTTP::Router).void }
-  def initialize(router)
-    @router = T.let(router, HTTP::Router)
+  sig { void }
+  def initialize()
+    @router = T.let(HTTP::Router.new, HTTP::Router)
+    
+    EmployeeResource::Routes.new(@router)
   end
   
   sig {
