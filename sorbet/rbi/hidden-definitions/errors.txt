@@ -1461,6 +1461,8 @@
 # wrong constant name for_fd
 # wrong constant name def_method
 # wrong constant name def_module
+# wrong constant name inherited
+# wrong constant name inherited
 # wrong constant name _dump
 # wrong constant name initialize
 # wrong constant name _load
@@ -1936,7 +1938,6 @@
 # wrong constant name <Class:HTTPHeaderSyntaxError>
 # wrong constant name <Class:HTTPIMUsed>
 # wrong constant name <Class:HTTPInformation>
-# wrong constant name <Class:HTTPInformationCode>
 # wrong constant name <Class:HTTPInsufficientStorage>
 # wrong constant name <Class:HTTPInternalServerError>
 # wrong constant name <Class:HTTPLengthRequired>
@@ -1976,7 +1977,6 @@
 # wrong constant name <Class:HTTPServerError>
 # wrong constant name <Class:HTTPServiceUnavailable>
 # wrong constant name <Class:HTTPSuccess>
-# wrong constant name <Class:HTTPSuccessCode>
 # wrong constant name <Class:HTTPSwitchProtocol>
 # wrong constant name <Class:HTTPTemporaryRedirect>
 # wrong constant name <Class:HTTPTooManyRequests>
@@ -4206,7 +4206,6 @@
 # uninitialized constant NKF
 # uninitialized constant Net
 # uninitialized constant Net
-# wrong constant name inherited
 # uninitialized constant Newton
 # uninitialized constant Newton
 # wrong constant name =~
@@ -4235,6 +4234,7 @@
 # uninitialized constant OpenSSL::PKCS5::PKCS5Error
 # wrong constant name __id__!
 # wrong constant name __send__!
+# wrong constant name at_exit!
 # wrong constant name class!
 # wrong constant name clone!
 # wrong constant name define_singleton_method!
@@ -4246,6 +4246,7 @@
 # wrong constant name encode_with
 # wrong constant name encode_with!
 # wrong constant name enum_for!
+# wrong constant name exit!
 # wrong constant name extend!
 # wrong constant name freeze!
 # wrong constant name gem!
@@ -4263,6 +4264,11 @@
 # wrong constant name method!
 # wrong constant name methods!
 # wrong constant name object_id!
+# wrong constant name pretty_inspect!
+# wrong constant name pretty_print!
+# wrong constant name pretty_print_cycle!
+# wrong constant name pretty_print_inspect!
+# wrong constant name pretty_print_instance_variables!
 # wrong constant name private_methods!
 # wrong constant name protected_methods!
 # wrong constant name public_method!
@@ -4277,6 +4283,7 @@
 # wrong constant name then!
 # wrong constant name to_enum!
 # wrong constant name to_h!
+# wrong constant name to_json!
 # wrong constant name to_s!
 # wrong constant name yield_self!
 # uninitialized constant OpenURI
@@ -5784,7 +5791,6 @@
 # wrong constant name get_encoding
 # wrong constant name register_scheme
 # wrong constant name <static-init>
-# wrong constant name inherited
 # uninitialized constant Vector
 # uninitialized constant Vector
 # uninitialized constant WEBrick

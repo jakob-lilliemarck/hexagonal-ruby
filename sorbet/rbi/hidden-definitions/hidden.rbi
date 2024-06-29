@@ -8,6 +8,7 @@ class Addrinfo
 end
 
 class App
+  extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
 end
 
@@ -2851,6 +2852,23 @@ class Class
   def json_creatable?(); end
 end
 
+class Core::Employee
+  extend ::T::Private::Methods::MethodHooks
+  extend ::T::Private::Methods::SingletonMethodHooks
+end
+
+module Core::EmployeeDrivenPort
+  extend ::T::Private::Abstract::Hooks
+  extend ::T::Private::Methods::MethodHooks
+  extend ::T::Private::Methods::SingletonMethodHooks
+end
+
+module Core::EmployeeDrivingPort
+  extend ::T::Private::Abstract::Hooks
+  extend ::T::Private::Methods::MethodHooks
+  extend ::T::Private::Methods::SingletonMethodHooks
+end
+
 class Date
   def deconstruct_keys(arg); end
 
@@ -3044,34 +3062,38 @@ class Dir
   def self.for_fd(arg); end
 end
 
+class Driven::EmployeeRepository
+  extend ::T::Private::Methods::MethodHooks
+  extend ::T::Private::Methods::SingletonMethodHooks
+end
+
+class Driven::RecordNotFound
+  extend ::T::Private::Methods::MethodHooks
+  extend ::T::Private::Methods::SingletonMethodHooks
+end
+
+class Driving::EmployeeService
+  extend ::T::Private::Methods::MethodHooks
+  extend ::T::Private::Methods::SingletonMethodHooks
+end
+
 class ERB
   def def_method(mod, methodname, fname=T.unsafe(nil)); end
 
   def def_module(methodname=T.unsafe(nil)); end
 end
 
-class Employee
-  extend ::T::Private::Methods::SingletonMethodHooks
+class EmployeeResource::NewUserParams
+  def self.inherited(s); end
 end
 
-module EmployeeDrivenPort
-  extend ::T::Private::Abstract::Hooks
+class EmployeeResource::Routes
   extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
 end
 
-module EmployeeDrivingPort
-  extend ::T::Private::Abstract::Hooks
-  extend ::T::Private::Methods::MethodHooks
-  extend ::T::Private::Methods::SingletonMethodHooks
-end
-
-class EmployeeRepository
-  extend ::T::Private::Methods::SingletonMethodHooks
-end
-
-class EmployeeService
-  extend ::T::Private::Methods::SingletonMethodHooks
+class EmployeeResource::UpdateUserParams
+  def self.inherited(s); end
 end
 
 class Encoding
@@ -4692,6 +4714,8 @@ end
 module Gem::Net::HTTP::ProxyDelta
 end
 
+Gem::Net::HTTP::ProxyMod = Gem::Net::HTTP::ProxyDelta
+
 class Gem::Net::HTTP::Put
   METHOD = ::T.let(nil, ::T.untyped)
   REQUEST_HAS_BODY = ::T.let(nil, ::T.untyped)
@@ -4804,6 +4828,8 @@ end
 class Gem::Net::HTTPClientError
   HAS_BODY = ::T.let(nil, ::T.untyped)
 end
+
+Gem::Net::HTTPClientError::EXCEPTION_TYPE = Gem::Net::HTTPClientException
 
 class Gem::Net::HTTPClientError
 end
@@ -5067,16 +5093,12 @@ class Gem::Net::HTTPInformation
   HAS_BODY = ::T.let(nil, ::T.untyped)
 end
 
-class Gem::Net::HTTPInformation
-end
+Gem::Net::HTTPInformation::EXCEPTION_TYPE = Gem::Net::HTTPError
 
 class Gem::Net::HTTPInformation
 end
 
-Gem::Net::HTTPInformationCode::EXCEPTION_TYPE = Gem::Net::HTTPError
-
-class Gem::Net::HTTPInformation
-end
+Gem::Net::HTTPInformationCode = Gem::Net::HTTPInformation
 
 class Gem::Net::HTTPInsufficientStorage
   HAS_BODY = ::T.let(nil, ::T.untyped)
@@ -5282,6 +5304,8 @@ class Gem::Net::HTTPRedirection
   HAS_BODY = ::T.let(nil, ::T.untyped)
 end
 
+Gem::Net::HTTPRedirection::EXCEPTION_TYPE = Gem::Net::HTTPRetriableError
+
 class Gem::Net::HTTPRedirection
 end
 
@@ -5429,6 +5453,8 @@ class Gem::Net::HTTPServerError
   HAS_BODY = ::T.let(nil, ::T.untyped)
 end
 
+Gem::Net::HTTPServerError::EXCEPTION_TYPE = Gem::Net::HTTPFatalError
+
 class Gem::Net::HTTPServerError
 end
 
@@ -5449,16 +5475,12 @@ class Gem::Net::HTTPSuccess
   HAS_BODY = ::T.let(nil, ::T.untyped)
 end
 
-class Gem::Net::HTTPSuccess
-end
+Gem::Net::HTTPSuccess::EXCEPTION_TYPE = Gem::Net::HTTPError
 
 class Gem::Net::HTTPSuccess
 end
 
-Gem::Net::HTTPSuccessCode::EXCEPTION_TYPE = Gem::Net::HTTPError
-
-class Gem::Net::HTTPSuccess
-end
+Gem::Net::HTTPSuccessCode = Gem::Net::HTTPSuccess
 
 class Gem::Net::HTTPSwitchProtocol
   HAS_BODY = ::T.let(nil, ::T.untyped)
@@ -7933,14 +7955,17 @@ module Gem
 end
 
 class HTTP::BadRequest
+  extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
 end
 
 class HTTP::ErrorUnknown
+  extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
 end
 
 class HTTP::NotFound
+  extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
 end
 
@@ -7953,6 +7978,7 @@ class HTTP::RouteRecord
 end
 
 class HTTP::Router
+  extend ::T::Private::Methods::MethodHooks
   extend ::T::Private::Methods::SingletonMethodHooks
   def self.inherited(s); end
 end
@@ -8326,10 +8352,6 @@ class NameError
   include ::DidYouMean::Correctable
 end
 
-class NewUserParams
-  def self.inherited(s); end
-end
-
 class NilClass
   def =~(arg); end
 end
@@ -8365,10 +8387,6 @@ class Object
   TOPLEVEL_BINDING = ::T.let(nil, ::T.untyped)
 end
 
-class Object
-  extend ::T::Private::Methods::MethodHooks
-end
-
 class ObjectSpace::WeakMap
   def delete(arg); end
 end
@@ -8381,6 +8399,8 @@ class OpenStruct
   def __id__!(); end
 
   def __send__!(*arg); end
+
+  def at_exit!(&block); end
 
   def class!(); end
 
@@ -8403,6 +8423,8 @@ class OpenStruct
   def encode_with!(coder); end
 
   def enum_for!(*arg); end
+
+  def exit!(*arg); end
 
   def extend!(mod, *args); end
 
@@ -8438,6 +8460,16 @@ class OpenStruct
 
   def object_id!(); end
 
+  def pretty_inspect!(); end
+
+  def pretty_print!(q); end
+
+  def pretty_print_cycle!(q); end
+
+  def pretty_print_inspect!(); end
+
+  def pretty_print_instance_variables!(); end
+
   def private_methods!(*arg); end
 
   def protected_methods!(*arg); end
@@ -8465,6 +8497,8 @@ class OpenStruct
   def to_enum!(*arg); end
 
   def to_h!(&block); end
+
+  def to_json!(*arg); end
 
   def to_s!(); end
 
@@ -10458,10 +10492,6 @@ module RbConfig
   def self.fire_update!(key, val, mkconf=T.unsafe(nil), conf=T.unsafe(nil)); end
 end
 
-class RecordNotFound
-  extend ::T::Private::Methods::SingletonMethodHooks
-end
-
 class Refinement
   def target(); end
 end
@@ -10899,10 +10929,6 @@ module UnicodeNormalize
 end
 
 module UnicodeNormalize
-end
-
-class UpdateUserParams
-  def self.inherited(s); end
 end
 
 module Warning

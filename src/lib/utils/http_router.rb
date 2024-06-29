@@ -1,4 +1,5 @@
 # typed: strict
+
 require 'sorbet-runtime'
 
 module HTTP
@@ -10,29 +11,29 @@ module HTTP
 
   class ErrorUnknown < StandardError
     extend T::Sig
-  
+
     sig { void }
     def initialize
-      super("Unknown error")
+      super('Unknown error')
     end
   end
 
   class BadRequest < StandardError
     extend T::Sig
-  
+
     sig { void }
     def initialize
-      super("Bad request")
+      super('Bad request')
     end
   end
 
   class NotFound < StandardError
-      extend T::Sig
-    
-      sig { void }
-      def initialize
-        super("Not found")
-      end
+    extend T::Sig
+
+    sig { void }
+    def initialize
+      super('Not found')
+    end
   end
 
   class Request < T::Struct
@@ -50,7 +51,7 @@ module HTTP
 
     prop :handlers, T::Hash[String, Handler], default: {}
 
-    sig { params( method: String, path: String, handler: Handler).void }
+    sig { params(method: String, path: String, handler: Handler).void }
     def register(method, path, &handler)
       route = fmt(method, path)
       @handlers[route] = handler
@@ -58,17 +59,15 @@ module HTTP
 
     sig { params(method: String, path: String, body: T.nilable(T::Hash[String, T.untyped])).returns(Response) }
     def call(method, path, body)
-      begin
-        record = match_route(method, path)
-        params = parse_params(record.path, path)
-        request = Request::new(params: params, body: body)
-        resource = record.handler.call(request)
-        [200, {'Content-Type' => 'application/json'}, [resource || '']]
-      rescue NotFound
-        [404, {'Content-Type' => 'text/plain'}, ['Not Found']]
-      rescue BadRequest
-        [400, {'Content-Type' => 'text/plain'}, ['Bad request']]
-      end
+      record = match_route(method, path)
+      params = parse_params(record.path, path)
+      request = Request.new(params: params, body: body)
+      resource = record.handler.call(request)
+      [200, { 'Content-Type' => 'application/json' }, [resource || '']]
+    rescue NotFound
+      [404, { 'Content-Type' => 'text/plain' }, ['Not Found']]
+    rescue BadRequest
+      [400, { 'Content-Type' => 'text/plain' }, ['Bad request']]
     end
 
     private
@@ -90,7 +89,7 @@ module HTTP
         next if pattern_method != method
 
         # Replaces the parameter keys in the pattern with the regex pattern for capturing values
-        regex_pattern = pattern_path.gsub(/:[^\/]+/, '[^\/]+')
+        regex_pattern = pattern_path.gsub(%r{:[^/]+}, '[^\/]+')
 
         # If the path does not match the regex pattern, skip to the next pattern
         next unless fmt(method, path).match(/^#{method} #{regex_pattern}$/)
@@ -106,7 +105,7 @@ module HTTP
       raise NotFound.new
     end
 
-    # Matches a given path against registered route patterns and returns the matched pattern.  
+    # Matches a given path against registered route patterns and returns the matched pattern.
     sig { params(pattern: String, actual: String).returns(T::Hash[Symbol, String]) }
     def parse_params(pattern, actual)
       # Extracts the parameter keys from the pattern (e.g., :id, :name)
@@ -142,7 +141,7 @@ module HTTP
     sig { returns(Regexp) }
     def pattern_param_value
       # '([^/]+)' is a regex pattern that matches any sequence of characters except for /
-      /([^\/]+)/
+      %r{([^/]+)}
     end
 
     # Formats an HTTP method and path into a single string.
