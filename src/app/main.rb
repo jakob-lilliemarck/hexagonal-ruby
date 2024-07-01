@@ -3,7 +3,7 @@
 
 require 'json'
 require 'sorbet-runtime'
-require_relative 'resources/employee'
+require_relative 'handlers/employee_handlers'
 require_relative '../lib/driven/employee_repository'
 
 # API application
@@ -12,10 +12,14 @@ class App
 
   sig { void }
   def initialize
-    @router = T.let(HTTP::Router.new, HTTP::Router)
-    @employee_repository = T.let(Driven::EmployeeRepository.new, Driven::EmployeeRepository)
+    employee_repository = Driven::EmployeeRepository.new
+    employee_service = Driving::EmployeeService.new(employee_repository)
 
-    EmployeeResource::Routes.new(@router, @employee_repository)
+    @router = T.let(HTTP::Router.new, HTTP::Router)
+    @employee_repository = T.let(employee_repository, Driven::EmployeeRepository)
+    @employee_service = T.let(employee_service, Driving::EmployeeService)
+
+    EmployeeHandlers::Routes.new(@router, @employee_service)
   end
 
   sig do
